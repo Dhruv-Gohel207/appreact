@@ -1,5 +1,5 @@
 .gradient-bg {
-    background: linear-gradient(90deg, rgba(50, 30, 110, 0.5), rgba(0, 204, 195, 0.5)); /* Adjust the colors as needed */
-    min-height: 100vh; /* This ensures the gradient covers the full height of the viewport */
+    background: linear-gradient(90deg, rgba(50, 30, 110, 0.5), rgba(0, 204, 195, 0.5)); 
+    min-height: 100vh; 
   }
   

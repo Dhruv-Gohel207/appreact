@@ -294,16 +294,15 @@ export class News extends Component {
     document.title = `${this.props.category} - News`
   }
   async updateNews() {
-    this.props.setProgress(10);  // Corrected to use this.props
+    this.props.setProgress(10);  
     const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.apiKey}&page=${this.state.page}&pageSize=${this.props.pageSize}`;
     this.setState({ loading: true });
 
     try {
         let data = await fetch(url);
-        this.props.setProgress(50);  // Update progress
+        this.props.setProgress(50);
         let parsedData = await data.json();
-        this.props.setProgress(70);  // Update progress
-
+        this.props.setProgress(70); 
         console.log(parsedData);
 
         if (parsedData.status === "ok") {
@@ -312,16 +311,16 @@ export class News extends Component {
                 totalResults: parsedData.totalResults, 
                 loading: false,
             });
-            this.props.setProgress(100);  // Complete the progress bar
+            this.props.setProgress(100);  
         } else {
             console.error("Error fetching data: ", parsedData.message);
             this.setState({ loading: false });
-            this.props.setProgress(100);  // Complete even if there’s an error
+            this.props.setProgress(100);  
         }
     } catch (error) {
         console.error("Error fetching data: ", error);
         this.setState({ loading: false });
-        this.props.setProgress(100);  // Ensure progress finishes on error
+        this.props.setProgress(100);  
     }
 }
 
@@ -366,19 +365,19 @@ render() {
                 <div className='container'>
                 <div className='row'>
     {!this.state.loading && this.state.articles.map((e) => { 
-        return e.title ? ( // Ensure the article has a title
+        return e.title ? (
             <div className='col-md-4' key={e.url}>
                 <NewsItem 
-                    title={e.title || "No Title Available"} // Fallback if title is missing
-                    description={e.description || "No Description Available"} // Fallback for description
-                    imageUrl={e.urlToImage || "https://via.placeholder.com/150"} // Fallback for image
+                    title={e.title || "No Title Available"} 
+                    description={e.description || "No Description Available"} 
+                    imageUrl={e.urlToImage || "https://via.placeholder.com/150"} 
                     newsUrl={e.url} 
-                    author={e.author || "Unknown"} // Fallback for author
-                    date={e.publishedAt || new Date()} // Fallback for date
-                    source={e.source ? e.source.name : "Unknown Source"} // Fallback for source
+                    author={e.author || "Unknown"} 
+                    date={e.publishedAt || new Date()} 
+                    source={e.source ? e.source.name : "Unknown Source"}
                 />
             </div>
-        ) : null;  // If title is undefined, skip rendering
+        ) : null; 
     })}
 </div>
 
