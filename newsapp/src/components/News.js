@@ -13,24 +13,24 @@ const News = (props) => {
   const updateNews = async () => {
     props.setProgress(10);  
     const url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.apiKey}&page=${page}&pageSize=${props.pageSize}`;
-    setLoading(true);  // No 'this' anymore, use setLoading instead
+    
+    setLoading(true);  // Show spinner while loading
 
     try {
       let data = await fetch(url);
       props.setProgress(50);
       let parsedData = await data.json();
       props.setProgress(70);
-      
-      setArticles(parsedData.articles);  // Use setArticles to update articles state
+
+      // Use spread operator to append new articles to the existing ones
+      setArticles(prevArticles => [...prevArticles, ...parsedData.articles]);
       setTotalResults(parsedData.totalResults);
-      setLoading(false);
+      setLoading(false);  // Stop spinner
       props.setProgress(100);
     } catch (error) {
       console.error("Error fetching data: ", error);
-      setLoading(false);
+      setLoading(false);  // Stop spinner even on error
       props.setProgress(100);
-      setLoading(false);
-
     }
   };
 
@@ -40,34 +40,27 @@ const News = (props) => {
   }, [page]);  // Re-run the effect when the page changes
 
   const fetchMoreData = async () => {
-    setPage(page + 1);  // Increment the page number
-    const url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.apiKey}&page=${page + 1}&pageSize=${props.pageSize}`;
-    
-    let data = await fetch(url);
-    let parsedData = await data.json();
-    
-    setArticles(articles.concat(parsedData.articles));  // Append new articles to the existing ones
-    setTotalResults(parsedData.totalResults);
+    setPage(page + 1);  // Increment the page number to fetch more data
   };
 
   return (
     <div className='container sm:m-5'>
       <h2 className='text-center my-2'>NEWS - Top {props.category} Headlines</h2>
       
-      {loading && <Spinner />}
-      
+      {/* Show spinner when loading and no articles are loaded yet */}
+      {loading && articles.length === 0 && <Spinner />}
+
       <InfiniteScroll
         dataLength={articles.length}
         next={fetchMoreData}
-        hasMore={articles.length !== totalResults}
-        loader={<Spinner />}
+        hasMore={articles.length < totalResults}  // Check if there are more articles to load
+        loader={<Spinner />}  // Spinner for when loading more data
       >
         <div className='container'>
           <div className='row'>
-            {!loading && articles.map((e) => (
+            {articles.map((e, index) => (
               e.title ? (
-                <div className='col-md-4' key={e.url}>
-                  
+                <div className='col-md-4' key={e.url + index}>
                   <NewsItem 
                     title={e.title || "No Title Available"} 
                     description={e.description || "No Description Available"} 
@@ -76,17 +69,18 @@ const News = (props) => {
                     author={e.author || "Unknown"} 
                     date={e.publishedAt || new Date()} 
                     source={e.source ? e.source.name : "Unknown Source"}
-                    
                   />
-                  
                 </div>
               ) : null
-              
             ))}
           </div>
         </div>
       </InfiniteScroll>
-      
+
+      {/* No more articles message */}
+      {!loading && articles.length >= totalResults && (
+        <p className="text-center">No more articles to display</p>
+      )}
     </div>
   );
 };

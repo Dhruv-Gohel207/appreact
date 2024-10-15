@@ -4,9 +4,9 @@ const NewsItem =(props)=> {
   
     let { title, description, imageUrl, newsUrl, author, date, source } = props;
     return (
-      <div className='container my-4 sm:m-5'>
-        <div className="row justify-content-center">
-          <div className="col-md-15 col-lg-10">
+      <div className='container my-4 sm:m-5' style={{ overflow:'hidden'}}>
+        <div className="row justify-content-center" >
+          <div className="col-md-15 col-lg-10" >
             <div className="card mb-8" style={{ width: "100%" }}>
               <img 
                 src={imageUrl || "https://via.placeholder.com/150"} 
