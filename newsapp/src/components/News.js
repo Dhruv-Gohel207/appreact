@@ -18,7 +18,7 @@ const News = ({ country = 'us', pageSize = 12, category = 'general', apiKey, set
       let data = await fetch(url);
       let parsedData = await data.json();
 
-      // Filter out duplicates based on unique URLs
+      // Filter out duplicates based on unique URL
       setArticles(prevArticles => {
         const articleSet = new Set(prevArticles.map(article => article.url));
         const uniqueArticles = parsedData.articles.filter(article => !articleSet.has(article.url));
@@ -37,7 +37,7 @@ const News = ({ country = 'us', pageSize = 12, category = 'general', apiKey, set
     setProgress(10);
     updateNews();
     setProgress(100);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    //eslint-disable-next-line
   }, [page]);
 
   const fetchMoreData = () => {
@@ -50,14 +50,13 @@ const News = ({ country = 'us', pageSize = 12, category = 'general', apiKey, set
     <div className='container sm:m-5'>
       <h2 className='text-center my-2'>NEWS - Top {category} Headlines</h2>
 
-      {/* Show spinner when loading and no articles are loaded yet */}
       {loading && articles.length === 0 && <Spinner />}
 
       <InfiniteScroll
         dataLength={articles.length}
         next={fetchMoreData}
-        hasMore={articles.length < totalResults} // Check if there are more articles to load
-        loader={<Spinner />} // Spinner for when loading more data
+        hasMore={articles.length < totalResults} load
+        loader={<Spinner />} 
       >
         <div className='container'>
           <div className='row'>
@@ -80,7 +79,6 @@ const News = ({ country = 'us', pageSize = 12, category = 'general', apiKey, set
         </div>
       </InfiniteScroll>
 
-      {/* No more articles message */}
       {!loading && articles.length >= totalResults && (
         <p className="text-center">No more articles to display</p>
       )}
