@@ -94,7 +94,7 @@ router.delete('/deletenote/:id', fetchuser, async (req, res) => {
         // Delete the note
         await Notes.findByIdAndDelete(req.params.id);
 
-        res.json({ success: true, message: "Note has been deleted successfully" });
+        res.json({ success: true, message: "Note has been deleted successfully" , note:note});
     } catch (error) {
         console.error(error.message);
         res.status(500).send("Internal Server Error");
