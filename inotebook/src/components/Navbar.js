@@ -28,6 +28,10 @@ const Navbar = () => {
                <Link className={`nav-link ${location.pathname==="/about"?"active": ""}`} to="/about">About</Link>
             </li>
           </ul>
+          <div className="d-flex" style={{ marginLeft: "auto" }}>
+            <Link className="btn btn-primary mx-1" to="/login">Login</Link>
+            <Link className="btn btn-primary mx-1" to="/signup">Sign-Up</Link>
+          </div>
         </div>
       </div>
     </nav>

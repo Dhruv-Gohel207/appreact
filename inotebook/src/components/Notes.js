@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import noteContext from "../context/notes/noteContext";
-import Noteitem from "./Noteitem";
+import Noteitem from "./NoteItem";
 import Addnote from "./Addnote";
 
-const Notes = () => {
+const Notes = (props) => {
   const context = useContext(noteContext);
   const { notes, getNotes, editNote } = context;
 
@@ -23,12 +23,14 @@ const Notes = () => {
       tag: currentNote.tag,
     });
     setShowModal(true);
+    props.showAlert("Updated SuccessFully", "success");
   };
 
   const handleClick = (e) => {
     e.preventDefault();
     if (!note.title || !note.description) {
       alert("Title and Description are required");
+      props.showAlert("Updated Successfully", "success");
       return;
     }
     editNote(note.id, note.title, note.description, note.tag);
@@ -42,10 +44,13 @@ const Notes = () => {
 
   return (
     <>
-      <Addnote />
+      <Addnote showAlert={props.showAlert} />
 
       <div className="row my-3">
         <h2>Your Notes</h2>
+      <div className="container">
+        {notes.length === 0 && 'no notes to display'}
+        </div>
         {notes.map((note) => {
           return <Noteitem key={note._id} updateNote={updateNote} note={note} />;
         })}

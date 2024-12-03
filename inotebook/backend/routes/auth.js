@@ -13,15 +13,17 @@ router.post('/createuser', [
     body('email', 'Enter a valid email').isEmail(),
     body('password', 'Password must be at least 5 characters').isLength({ min: 5 })
 ], async (req, res) => {
+    let success = false;
+
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+        return res.status(400).json({ success, errors: errors.array() });
     }
 
     try {
         let user = await User.findOne({ email: req.body.email });
         if (user) {
-            return res.status(400).json({ error: "A user with this email already exists" });
+            return res.status(400).json({ success, error: "A user with this email already exists" });
         }
 
         const salt = await bcrypt.genSalt(10);
@@ -40,7 +42,9 @@ router.post('/createuser', [
             }   
         };
         const authToken = jwt.sign(data, JWT_SECRET);
-        res.json({ authToken });
+
+        success = true;
+        res.json({success, authToken });
     } catch (error) {
         console.error(error.message);
         res.status(500).send("Internal Server Error");
@@ -53,6 +57,8 @@ router.post('/login', [
     body('password', 'Password cannot be blank').exists()
 ], async (req, res) => {
     const errors = validationResult(req);
+    let success = false;
+
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
@@ -67,7 +73,9 @@ router.post('/login', [
 
         const passwordCompare = await bcrypt.compare(password, user.password);
         if (!passwordCompare) {
+            success = false;
             return res.status(400).json({ error: "Invalid credentials" });
+
         }
 
         const data = {
@@ -76,7 +84,8 @@ router.post('/login', [
             }
         };
         const authToken = jwt.sign(data, JWT_SECRET);
-        res.json({ authToken });
+        success = true;
+        res.json({success, authToken });
     } catch (error) {
         console.error(error.message);
         res.status(500).send("Internal Server Error");
