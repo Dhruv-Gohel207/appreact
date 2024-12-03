@@ -21,19 +21,20 @@ const Notes = (props) => {
       title: currentNote.title,     
       description: currentNote.description,
       tag: currentNote.tag,
+      // props.showAlert("Updated SuccessFully", "success");
     });
     setShowModal(true);
-    props.showAlert("Updated SuccessFully", "success");
-  };
+  }; 
 
   const handleClick = (e) => {
     e.preventDefault();
     if (!note.title || !note.description) {
       alert("Title and Description are required");
-      props.showAlert("Updated Successfully", "success");
       return;
     }
     editNote(note.id, note.title, note.description, note.tag);
+    props.showAlert("Updated Successfully", "success");
+
     setShowModal(false);
     setNote({ id: "", title: "", description: "", tag: "" }); // Clear note state after editing
   };
@@ -52,7 +53,7 @@ const Notes = (props) => {
         {notes.length === 0 && 'no notes to display'}
         </div>
         {notes.map((note) => {
-          return <Noteitem key={note._id} updateNote={updateNote} note={note} />;
+          return <Noteitem key={note._id} updateNote={updateNote} note={note}   showAlert={props.showAlert}  />;
         })}
       </div>
 
