@@ -2,8 +2,10 @@ import React, { useContext, useEffect, useState } from "react";
 import noteContext from "../context/notes/noteContext";
 import Noteitem from "./NoteItem";
 import Addnote from "./Addnote";
+import { useNavigate } from "react-router-dom";
 
 const Notes = (props) => {
+  let navigate = useNavigate();
   const context = useContext(noteContext);
   const { notes, getNotes, editNote } = context;
 
@@ -11,9 +13,15 @@ const Notes = (props) => {
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    getNotes(); // Fetch notes when the component mounts
+    const token = localStorage.getItem('token');
+    if (token) {
+      getNotes();
+    } else {
+      navigate("/login");
+    }
     // eslint-disable-next-line
   }, []);
+  
 
   const updateNote = (currentNote) => {
     setNote({

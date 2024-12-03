@@ -9,18 +9,34 @@ const NoteState = (props) => {
 
         //Get All Notes
         const getNotes = async () => {
-            //  API Call 
-            const response = await fetch(`${host}/api/notes/fetchallnotes`, {
-                method: 'GET',
-                headers: {
-                'Content-Type': 'application/json',
-                "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjc0NmM2NmQ2ZDUzMTM0NmRlY2I1N2Q5In0sImlhdCI6MTczMjcwMjQyMH0.wOg0vMH5q03jHWez135u8Bl0xZK_3Oo9--QHNr6jUaY"
+            try {
+                const response = await fetch(`${host}/api/notes/fetchallnotes`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'auth-token': localStorage.getItem('token'),
+                    },
+                });
+        
+                if (!response.ok) {
+                    throw new Error("Failed to fetch notes");
                 }
-            });
-            const json = await response.json();
-            setNotes(json);
-    
-          }
+        
+                const json = await response.json();
+        
+                // Ensure json is an array
+                if (Array.isArray(json)) {
+                    setNotes(json);
+                } else {
+                    setNotes([]); // Fallback to an empty array if response isn't an array
+                    console.error("Invalid data received from server");
+                }
+            } catch (error) {
+                console.error("Error fetching notes:", error.message);
+                setNotes([]); // Fallback to an empty array on error
+            }
+        };
+        
 
     //Add Notes
     const addNote = async(title, description, tag)=>{
@@ -31,7 +47,7 @@ const NoteState = (props) => {
             method: 'POST',
             headers: {
             'Content-Type': 'application/json',
-            "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjc0NmM2NmQ2ZDUzMTM0NmRlY2I1N2Q5In0sImlhdCI6MTczMjcwMjQyMH0.wOg0vMH5q03jHWez135u8Bl0xZK_3Oo9--QHNr6jUaY"
+            "auth-token": localStorage.getItem('token')
             },
             body: JSON.stringify({title, description, tag})
         });
@@ -62,7 +78,7 @@ const NoteState = (props) => {
                 method: 'DELETE',
                 headers: {
                 'Content-Type': 'application/json',
-                "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjc0NmM2NmQ2ZDUzMTM0NmRlY2I1N2Q5In0sImlhdCI6MTczMjcwMjQyMH0.wOg0vMH5q03jHWez135u8Bl0xZK_3Oo9--QHNr6jUaY"
+                "auth-token": localStorage.getItem('token')
                 }
             });
             const json = response.json();
@@ -85,7 +101,7 @@ const NoteState = (props) => {
                     method: 'PUT',
                     headers: {
                     'Content-Type': 'application/json',
-                    "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjc0NmM2NmQ2ZDUzMTM0NmRlY2I1N2Q5In0sImlhdCI6MTczMjcwMjQyMH0.wOg0vMH5q03jHWez135u8Bl0xZK_3Oo9--QHNr6jUaY"
+                    "auth-token": localStorage.getItem('token')
                     },
                     body: JSON.stringify({title, description, tag})
                 });
