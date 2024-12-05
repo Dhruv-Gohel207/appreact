@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {Link} from "react-dom"
+// import {Link} from "react-router-dom"
 
 const Manager = () => {
   const [form, setform] = useState({ site: "", username: "", password: "" });
@@ -31,7 +31,7 @@ const Manager = () => {
     <>
       <div className="absolute inset-0 -z-10 h-full overflow-hidden w-full items-center px-5 py-24 [background:radial-gradient(125%_125%_at_50%_10%,#000_40%,#6b0182_100%)]" ></div>
 
-      <div className="mycontainer px-4 sm:px-8">
+      <div className="mycontainer px-4 sm:px-8 mt-0">
         <div className="logo font-bold p-4 text-2xl md:text-3xl text-center">
           <span className="text-purple-800 font-bold">&lt;</span>
           <span className="text-white">Pass</span>
@@ -89,7 +89,7 @@ const Manager = () => {
           >
             <lord-icon
               src="https://cdn.lordicon.com/hqymfzvj.json"
-              trigger="loop"
+              trigger="hover"
               delay="2000"
               colors="primary:#320a5c"
             ></lord-icon>
@@ -113,7 +113,7 @@ const Manager = () => {
                 {passwordArray.map((item,index)=>{
 
                     return <tr className="text-center" key={index}>  
-                 <td className="pt-4 border border-purple-500 pb-2">{item.site}</td>
+                 <td className="pt-4 border border-purple-500 pb-2"><a href={item.site} target="_blnak">{item.site}</a></td>
                  <td className="pt-4 border border-purple-500 pb-2">{item.username}</td>
                  <td className="pt-4 border border-purple-500 pb-2">{item.password}</td>
               </tr>
